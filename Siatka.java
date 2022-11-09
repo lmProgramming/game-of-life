@@ -1,42 +1,40 @@
 import java.util.Random;
 
-public class Grid {
+public class Siatka {
     boolean[][] siatka;
-    int n;
     int m;
+    int n;
 
-    public Grid(int n,int m){
-        siatka = new boolean[n][m];
+    public Siatka(int m, int n){
+        siatka = new boolean[m][n];
 
-        this.n = n;
         this.m = m;
+        this.n = n;
     }
 
-    public void WypelnijLosowo(double probability){
+    public void WypelnijLosowo(double prawdopodobienstwo){
         Random rand = new Random();
 
-        for (int x = 0; x < n; x++)
+        for (int x = 0; x < m; x++)
         {
-            for (int y = 0; y < m; y++)
+            for (int y = 0; y < n; y++)
             {
-                siatka[x][y] = rand.nextDouble(1) <= probability;
+                siatka[x][y] = rand.nextDouble(1) <= prawdopodobienstwo;
             }
         }
     }
 
     public void Krok(){
-        boolean[][] nowaSiatka = new boolean[n][m];
+        boolean[][] nowaSiatka = new boolean[m][n];
 
-        for (int x = 0; x < n; x++)
+        for (int x = 0; x < m; x++)
         {
-            for (int y = 0; y < m; y++)
+            for (int y = 0; y < n; y++)
             {
                 int[][] sasiedzi = Sasiedzi(x, y);
                 int liczbaSasiadow = 0;
                 for (int[] sasiadVector : sasiedzi) {
                     liczbaSasiadow += siatka[sasiadVector[0]][sasiadVector[1]] ? 1 : 0;
-                    //2/3
-                    //3
                 }
                 if (liczbaSasiadow == 2 && siatka[x][y]){
                     nowaSiatka[x][y] = true;
@@ -44,8 +42,6 @@ public class Grid {
                 else{
                     nowaSiatka[x][y] = liczbaSasiadow == 3;
                 }
-
-                //siatka[x][y] = rand.nextDouble(1) <= probability;
             }
         }
 
@@ -61,13 +57,13 @@ public class Grid {
             for (int yb = -1; yb <= 1; yb++){
                 if (xb != 0 || yb != 0)
                 {
-                    int xInd = (x + xb) % n;
+                    int xInd = (x + xb) % m;
                     if (xInd < 0){
-                        xInd += n;
+                        xInd += m;
                     }
-                    int yInd = (y + yb) % m;
+                    int yInd = (y + yb) % n;
                     if (yInd < 0){
-                        yInd += m;
+                        yInd += n;
                     }
                     sasiedzi[index] = new int[] { xInd, yInd };
                     index++;
@@ -78,14 +74,14 @@ public class Grid {
         return sasiedzi;
     }
 
-    public void DisplayInConsole(String alive, String dead, String separator)
+    public void DrukujWKonsoli(String zywy, String zmarly, String rozlacznik)
     {
-        for (int x = 0; x < n; x++)
+        for (int x = 0; x < m; x++)
         {
             StringBuilder s = new StringBuilder();
-            for (int y = 0; y < m; y++)
+            for (int y = 0; y < n; y++)
             {
-                s.append(siatka[x][y] ? alive : dead).append(separator);
+                s.append(siatka[x][y] ? zywy : zmarly).append(rozlacznik);
             }
 
             System.out.println(s);
